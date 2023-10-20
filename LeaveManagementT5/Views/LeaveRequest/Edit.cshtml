@@ -1,0 +1,21 @@
+﻿@model LeaveManagementT5.Models.LeaveRequest
+
+<h2>Edit Leave Request</h2>
+
+@using (Html.BeginForm("Edit", "LeaveRequest", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(model => model.StartDate)
+        @Html.DisplayFor(model => model.StartDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.EndDate)
+        @Html.DisplayFor(model => model.EndDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Status)
+        @Html.DropDownListFor(model => model.Status, ViewBag.StatusOptions as SelectList, "Select Status")
+    </div>
+    <input type="submit" value="Save" class="btn btn-primary" /> //Den här funktionen fungerar dåligt. Fel i databas? 
+}

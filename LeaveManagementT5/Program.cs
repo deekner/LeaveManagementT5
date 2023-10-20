@@ -1,6 +1,7 @@
 using LeaveManagementT5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using LeaveManagementT5.Models;
 
 namespace LeaveManagementT5
 {
@@ -16,7 +17,11 @@ namespace LeaveManagementT5
             //Inject connectionstring
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 
+
+
             builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders().AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
+            
 
             var app = builder.Build();
 

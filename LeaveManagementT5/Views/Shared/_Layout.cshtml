@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="~/LeaveManagementT5.styles.css" asp-append-version="true" />
 </head>
 <body>
+   
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -27,22 +29,75 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationRoles" asp-action="Index">Roles</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationRoles" asp-action="Index">Roles</a> 
+                        </li>
+
+
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveTypes" asp-action="Index">LeaveTypes</a>
                         </li>
 
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="LeaveAllocation" asp-action="Index">Create LeaveAllocation</a>
+                            </li>
+                            
+                        }
+                        
+
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveAllocation" asp-action="EmployeeLeaveAllocations">My LeaveAllocations</a>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Index">View LeaveRequest</a>
+                            </li>
+
+                        }
+
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Create">Create LeaveRequest</a>
+                        }
+
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="MyLeaveRequests">My LeaveRequest</a>
+                        }
+
+                       
                     </ul>
                 </div>
             </div>
             <partial name="_LoginPartial" />
         </nav>
     </header>
+    
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            @if (User.IsInRole("Employee"))
+            {
+                <h1>Hej ifrån Employee</h1>
+            }
+            @if(User.IsInRole("Admin"))
+            {
+                <h1>Hej Ifrån Admin</h1>
+            }
+
+          
         </main>
     </div>
 

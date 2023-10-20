@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LeaveManagementT5.Data;
 using LeaveManagementT5.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LeaveManagementT5.Controllers
 {
@@ -15,19 +16,22 @@ namespace LeaveManagementT5.Controllers
     public class EmployeesController : Controller
     {
         private readonly AppDbContext _context;
+        
 
         public EmployeesController(AppDbContext context)
         {
             _context = context;
+            
+            
         }
 
         [Authorize(Roles = "Admin,Employee")]
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-              return _context.Employees != null ? 
-                          View(await _context.Employees.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Employees'  is null.");
+            return _context.Employees != null ?
+                           View(await _context.Employees.ToListAsync()) :
+                           Problem("Entity set 'AppDbContext.Employees'  is null.");
         }
 
         [Authorize(Roles = "Admin,Employee")]

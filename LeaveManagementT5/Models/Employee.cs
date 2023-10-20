@@ -1,6 +1,8 @@
-﻿namespace LeaveManagementT5.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace LeaveManagementT5.Models
 {
-    public class Employee
+    public class Employee 
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -8,5 +10,7 @@
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+
+        
     }
 }

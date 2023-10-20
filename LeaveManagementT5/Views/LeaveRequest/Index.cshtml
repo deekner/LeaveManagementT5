@@ -1,0 +1,39 @@
+﻿@model List<LeaveManagementT5.Models.LeaveRequest>
+
+<h2>Leave Requests</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var leaveRequest in Model)
+        {
+            <tr>
+                <td>@leaveRequest.Employee.UserName</td>
+                <td>@leaveRequest.LeaveType.Name</td>
+                <td>@leaveRequest.StartDate.ToShortDateString()</td>
+                <td>@leaveRequest.EndDate.ToShortDateString()</td>
+                <td>@leaveRequest.Status</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <form asp-action="AcceptRequest" asp-route-id="@leaveRequest.Id" method="post">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form asp-action="DenyRequest" asp-route-id="@leaveRequest.Id" method="post">
+                            <button type="submit" class="btn btn-danger">Deny</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
