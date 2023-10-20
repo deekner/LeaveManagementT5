@@ -8,47 +8,42 @@ html {
   }
 }
 
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: Roboto,sans-serif;
 }
 
-body.login-page {
-    background-image: url('../images/loginbackground.jpg');
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+/*tab navigation*/
+.login-logout-card .card-header {
+    padding: 0px 0px 12px 0px;
 }
 
-body.login-page .container {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
+.login-logout-card ul.nav-tabs {
+    margin: 0px 0px -12px 0px;
 }
 
-
-.login-box-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;   
+.login-logout-card li.nav-item {
+    width: 50%;
 }
 
-.login-box {
+.login-logout-card a.nav-link {
+    font-size: 1rem;
+    color: #495057;
     text-align: center;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 10px; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    padding: 1rem;
 }
 
-/* Additional styling for input fields, buttons, etc. can be added here. */
+.login-logout-card .card-body {
+    padding: 10px 20px;
+}
+
 

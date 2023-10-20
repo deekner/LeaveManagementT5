@@ -25,7 +25,7 @@ public class LeaveAllocationController : Controller
     {
         var leaveAllocations = await _context.LeaveAllocation
             .Include(la => la.Employee)
-            .Include(la => la.LeaveType.Name)
+            .Include(la => la.LeaveType)
             .ToListAsync();
 
         return View(leaveAllocations);
