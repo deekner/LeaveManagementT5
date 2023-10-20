@@ -1,0 +1,24 @@
+﻿@model LeaveManagementT5.Models.LeaveAllocation
+
+<h2>Edit Leave Allocation</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="EmployeeId">Employee</label>
+        <select asp-for="EmployeeId" asp-items="ViewBag.EmployeeId" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="LeaveTypeId">Leave Type</label>
+        <select asp-for="LeaveTypeId" asp-items="ViewBag.LeaveTypeId" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberOfDays">Number of Days</label>
+        <input asp-for="NumberOfDays" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Year">Year</label>
+        <input asp-for="Year" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
