@@ -19,12 +19,20 @@ public class LeaveRequestController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult Index()
+    public IActionResult Index(string status)
     {
-        var leaveRequests = _context.LeaveRequest
-       .Include(lr => lr.Employee)       // Eager load Employee
-       .Include(lr => lr.LeaveType)     // Eager load LeaveType
-       .ToList();
+        var query = _context.LeaveRequest
+            .Include(lr => lr.Employee)
+            .Include(lr => lr.LeaveType)
+            .AsQueryable(); // Create a base query to build upon
+
+        // Check if a status filter is provided
+        if (!string.IsNullOrEmpty(status))
+        {
+            query = query.Where(lr => lr.Status == status);
+        }
+
+        var leaveRequests = query.ToList();
 
         return View(leaveRequests);
     }
