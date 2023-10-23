@@ -43,7 +43,7 @@ public class LeaveRequestController : Controller
 
     [HttpPost]
     [Authorize(Roles = "Employee")]
-    public async Task<IActionResult> Create(LeaveRequest leaveRequest)
+    public IActionResult Create(LeaveRequest leaveRequest)
     {
         // Set the status to "Pending" (default)
         leaveRequest.Status = "Pending";
@@ -53,11 +53,7 @@ public class LeaveRequestController : Controller
         
         leaveRequest.EmployeeId = user.Id;
 
-        var receiver = "hnikholuidtldybrni@cazlv.com";
-        var subject = "Leave Request";
-        var message = "You've got a message from LeaveManagementT5";
 
-        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Add(leaveRequest);
         _context.SaveChanges();
@@ -149,7 +145,7 @@ public class LeaveRequestController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult AcceptRequest(int id)
+    public async Task<IActionResult> AcceptRequest(int id)
     {
         var leaveRequest = _context.LeaveRequest.FirstOrDefault(lr => lr.Id == id);
         if (leaveRequest == null)
@@ -159,7 +155,12 @@ public class LeaveRequestController : Controller
 
         
         leaveRequest.Status = "Accepted";
-       
+
+        var receiver = "psmusjslitzwgvqyor@ckptr.com";
+        var subject = "Leave Request";
+        var message = "You've got a message from LeaveManagementT5";
+
+        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
@@ -168,7 +169,7 @@ public class LeaveRequestController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult DenyRequest(int id)
+    public async Task<IActionResult> DenyRequest(int id)
     {
         var leaveRequest = _context.LeaveRequest.FirstOrDefault(lr => lr.Id == id);
         if (leaveRequest == null)
@@ -179,6 +180,11 @@ public class LeaveRequestController : Controller
         
         leaveRequest.Status = "Declined";
         
+        var receiver = "psmusjslitzwgvqyor@ckptr.com";
+        var subject = "Leave Request";
+        var message = "You've got a message from LeaveManagementT5";
+
+        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
