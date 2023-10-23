@@ -5,17 +5,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LeaveManagementT5.Services;
 
 [Authorize]
 public class LeaveRequestController : Controller
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly AppDbContext _context;
+    private readonly IEmailSender _emailSender;
 
-    public LeaveRequestController(UserManager<IdentityUser> userManager, AppDbContext context)
+    public LeaveRequestController(UserManager<IdentityUser> userManager, AppDbContext context, IEmailSender emailSender)
     {
         _userManager = userManager;
         _context = context;
+        _emailSender = emailSender;
     }
 
     [Authorize(Roles = "Admin")]
@@ -57,8 +60,14 @@ public class LeaveRequestController : Controller
         var user = _userManager.GetUserAsync(User).Result;
         leaveRequest.EmployeeId = user.Id;
 
+
+
+        _context.LeaveRequest.Add(leaveRequest);
+        _context.SaveChanges();
+
         //Räkna ut dagarna genom att ta slut minus start 
         int requestedDays = (leaveRequest.EndDate - leaveRequest.StartDate).Days;
+
 
         
         var selectedLeaveType = _context.LeaveTypes.FirstOrDefault(lt => lt.Id == leaveRequest.LeaveTypeId);
@@ -176,7 +185,7 @@ public class LeaveRequestController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult AcceptRequest(int id)
+    public async Task<IActionResult> AcceptRequest(int id)
     {
         var leaveRequest = _context.LeaveRequest.FirstOrDefault(lr => lr.Id == id);
         if (leaveRequest == null)
@@ -186,7 +195,12 @@ public class LeaveRequestController : Controller
 
         
         leaveRequest.Status = "Accepted";
-       
+
+        var receiver = "agtrcnhewemeicggnk@cazlv.com";
+        var subject = "Leave Request";
+        var message = "You've got a message from LeaveManagementT5";
+
+        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
@@ -195,7 +209,7 @@ public class LeaveRequestController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult DenyRequest(int id)
+    public async Task<IActionResult> DenyRequest(int id)
     {
         var leaveRequest = _context.LeaveRequest.FirstOrDefault(lr => lr.Id == id);
         if (leaveRequest == null)
@@ -206,6 +220,11 @@ public class LeaveRequestController : Controller
         
         leaveRequest.Status = "Declined";
         
+        var receiver = "agtrcnhewemeicggnk@cazlv.com";
+        var subject = "Leave Request";
+        var message = "You've got a message from LeaveManagementT5";
+
+        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
