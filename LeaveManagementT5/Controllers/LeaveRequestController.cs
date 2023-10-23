@@ -196,11 +196,15 @@ public class LeaveRequestController : Controller
         
         leaveRequest.Status = "Accepted";
 
-        var receiver = "agtrcnhewemeicggnk@cazlv.com";
-        var subject = "Leave Request";
-        var message = "You've got a message from LeaveManagementT5";
+        var emailaddresses = _context.Users.Select(x => x.Email); //Finds the Email of select user depending on LeaveRequest
+        foreach (var emailaddress in emailaddresses) //Loops through all emails and sends message depending on user's email
+        {
+            var receiver = emailaddress;
+            var subject = "Leave Request";
+            var message = "You've got a message from the Leave management system";
 
-        await _emailSender.SendEmailAsync(receiver, subject, message);
+            await _emailSender.SendEmailAsync(receiver, subject, message);
+        }
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
@@ -219,12 +223,19 @@ public class LeaveRequestController : Controller
 
         
         leaveRequest.Status = "Declined";
-        
-        var receiver = "agtrcnhewemeicggnk@cazlv.com";
-        var subject = "Leave Request";
-        var message = "You've got a message from LeaveManagementT5";
 
-        await _emailSender.SendEmailAsync(receiver, subject, message);
+
+
+        var emailaddresses = _context.Users.Select(x => x.Email);
+        foreach (var emailaddress in emailaddresses)
+        {
+            var receiver = emailaddress;
+            var subject = "Leave Request";
+            var message = "You've got a message from the Leave management system";
+
+            await _emailSender.SendEmailAsync(receiver, subject, message);
+        }
+        
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
