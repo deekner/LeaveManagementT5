@@ -1,0 +1,25 @@
+﻿@model List<LeaveManagementT5.Models.LeaveAllocation>
+
+<h2>Leave Allocation</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Leave Type</th>
+            <th>Number of Days</th>
+            <th>Year</th>         
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var leaveAllocation in Model)
+        {
+            <tr>
+                <td>@leaveAllocation.Employee.UserName</td>
+                <td>@leaveAllocation.LeaveType?.Name</td>
+                <td>@leaveAllocation.NumberOfDays</td>
+                <td>@leaveAllocation.Year</td>              
+            </tr>
+        }
+    </tbody>
+</table>
