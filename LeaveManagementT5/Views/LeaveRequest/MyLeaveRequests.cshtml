@@ -9,6 +9,7 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Status</th>
+            <th>Actions</th>
             
         </tr>
     </thead>
@@ -20,6 +21,12 @@
                 <td>@leaveRequest.StartDate.ToShortDateString()</td>
                 <td>@leaveRequest.EndDate.ToShortDateString()</td>
                 <td>@leaveRequest.Status</td>
+                <td>
+                    <!-- Add a "Delete" button for each leave request -->
+                    <form asp-action="Delete" asp-route-id="@leaveRequest.Id" method="post">
+                        <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this leave request?');" />
+                    </form>
+                </td>
                
             </tr>
         }
