@@ -42,7 +42,7 @@ public class LeaveRequestController : Controller
     {
         // Load leave types into a dropdown for selection
         var leaveTypes = _context.LeaveTypes.ToList();
-        ViewBag.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
+        ViewBag.LeaveTypes = new SelectList(leaveTypes, "Id", "Name", "DefaultDays");
         return View();
     }
 
@@ -53,15 +53,43 @@ public class LeaveRequestController : Controller
         // Set the status to "Pending" (default)
         leaveRequest.Status = "Pending";
 
-        // Get the current user (employee) and set it as the requester
-        var user = _userManager.GetUserAsync(User).Result;
         
+        var user = _userManager.GetUserAsync(User).Result;
         leaveRequest.EmployeeId = user.Id;
 
-        _context.LeaveRequest.Add(leaveRequest);
-        _context.SaveChanges();
+        //Räkna ut dagarna genom att ta slut minus start 
+        int requestedDays = (leaveRequest.EndDate - leaveRequest.StartDate).Days;
 
-        return RedirectToAction("MyLeaveRequests");
+        
+        var selectedLeaveType = _context.LeaveTypes.FirstOrDefault(lt => lt.Id == leaveRequest.LeaveTypeId);
+
+        if (selectedLeaveType != null && requestedDays <= selectedLeaveType.DefaultDays)
+        {
+           
+            _context.LeaveRequest.Add(leaveRequest);
+            _context.SaveChanges();
+            
+
+            return RedirectToAction("MyLeaveRequests");
+        }
+
+        if (selectedLeaveType != null && requestedDays > selectedLeaveType.DefaultDays)
+        {
+            ViewBag.AlertClass = "alert-danger";
+            ViewBag.AlertMessage = "Requested days exceed the allowed limit for this leave type.";
+        }
+        else
+        {
+            ViewBag.AlertClass = "hidden"; 
+            ViewBag.AlertMessage = "";
+        }
+
+        // Handle the case where the requested days exceed the allowed limit
+        ModelState.AddModelError("EndDate", "Requested days exceed the allowed limit for this leave type.");
+        Console.WriteLine("Den gubben gick inte");
+        var leaveTypes = _context.LeaveTypes.ToList();
+        ViewBag.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
+        return View(leaveRequest);
     }
 
     [Authorize(Roles = "Admin")]
