@@ -156,7 +156,7 @@ public class LeaveRequestController : Controller
         
         leaveRequest.Status = "Accepted";
 
-        var receiver = "psmusjslitzwgvqyor@ckptr.com";
+        var receiver = "agtrcnhewemeicggnk@cazlv.com";
         var subject = "Leave Request";
         var message = "You've got a message from LeaveManagementT5";
 
@@ -180,7 +180,7 @@ public class LeaveRequestController : Controller
         
         leaveRequest.Status = "Declined";
         
-        var receiver = "psmusjslitzwgvqyor@ckptr.com";
+        var receiver = "agtrcnhewemeicggnk@cazlv.com";
         var subject = "Leave Request";
         var message = "You've got a message from LeaveManagementT5";
 
