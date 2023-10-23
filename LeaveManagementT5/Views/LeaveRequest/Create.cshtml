@@ -1,6 +1,7 @@
 ﻿@model LeaveManagementT5.Models.LeaveRequest
 
 <h2>Create Leave Request</h2>
+<div class="alert-message @ViewBag.AlertClass">@ViewBag.AlertMessage</div>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
@@ -17,3 +18,5 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+
