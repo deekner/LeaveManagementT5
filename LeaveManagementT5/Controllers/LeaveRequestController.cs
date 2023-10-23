@@ -5,17 +5,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LeaveManagementT5.Services;
 
 [Authorize]
 public class LeaveRequestController : Controller
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly AppDbContext _context;
+    private readonly IEmailSender _emailSender;
 
-    public LeaveRequestController(UserManager<IdentityUser> userManager, AppDbContext context)
+    public LeaveRequestController(UserManager<IdentityUser> userManager, AppDbContext context, IEmailSender emailSender)
     {
         _userManager = userManager;
         _context = context;
+        _emailSender = emailSender;
     }
 
     [Authorize(Roles = "Admin")]
@@ -40,7 +43,7 @@ public class LeaveRequestController : Controller
 
     [HttpPost]
     [Authorize(Roles = "Employee")]
-    public IActionResult Create(LeaveRequest leaveRequest)
+    public async Task<IActionResult> Create(LeaveRequest leaveRequest)
     {
         // Set the status to "Pending" (default)
         leaveRequest.Status = "Pending";
@@ -49,6 +52,12 @@ public class LeaveRequestController : Controller
         var user = _userManager.GetUserAsync(User).Result;
         
         leaveRequest.EmployeeId = user.Id;
+
+        var receiver = "hnikholuidtldybrni@cazlv.com";
+        var subject = "Leave Request";
+        var message = "You've got a message from LeaveManagementT5";
+
+        await _emailSender.SendEmailAsync(receiver, subject, message);
 
         _context.LeaveRequest.Add(leaveRequest);
         _context.SaveChanges();

@@ -2,6 +2,7 @@ using LeaveManagementT5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using LeaveManagementT5.Models;
+using LeaveManagementT5.Services;
 
 namespace LeaveManagementT5
 {
@@ -10,6 +11,9 @@ namespace LeaveManagementT5
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //email service dependency injection
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
