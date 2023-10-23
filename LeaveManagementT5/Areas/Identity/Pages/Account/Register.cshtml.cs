@@ -81,11 +81,11 @@ namespace LeaveManagementT5.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [Display(Name = "First Name")]
-            public string Firstname { get; set; }
+            public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
-            public string Lastname { get; set; }
+            public string LastName { get; set; }
 
             [Required]
             [EmailAddress]
@@ -147,8 +147,8 @@ namespace LeaveManagementT5.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                user.FirstName = Input.Firstname;
-                user.LastName = Input.Lastname;
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
