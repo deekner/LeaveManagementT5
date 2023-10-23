@@ -2,6 +2,20 @@
 
 <h2>Leave Requests</h2>
 
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <label for="status">Filter by Status:</label>
+        <select name="status" class="form-control">
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Approved</option>
+            <option value="Declined">Rejected</option>
+            <!-- Add other status options as needed -->
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Apply Filter</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
