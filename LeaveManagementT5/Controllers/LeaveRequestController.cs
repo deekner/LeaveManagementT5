@@ -91,7 +91,8 @@ public class LeaveRequestController : Controller
         return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Employee")]
+
+    [Authorize]
     public IActionResult Delete(int id)
     {
         var leaveRequest = _context.LeaveRequest.FirstOrDefault(lr => lr.Id == id);
@@ -100,17 +101,27 @@ public class LeaveRequestController : Controller
             return NotFound();
         }
 
-        // Check if the leave request belongs to the current user
         var user = _userManager.GetUserAsync(User).Result;
+
+        // Check if the user is an admin
+        if (User.IsInRole("Admin"))
+        {
+            // Admins can delete any LeaveRequest
+            _context.LeaveRequest.Remove(leaveRequest);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // Check if the leave request belongs to the current user
         if (leaveRequest.EmployeeId != user.Id)
         {
             return Unauthorized();
         }
 
+        // Non-admin users can only delete their own LeaveRequests
         _context.LeaveRequest.Remove(leaveRequest);
         _context.SaveChanges();
-
-        return RedirectToAction("Index");
+        return RedirectToAction("MyLeaveRequests");
     }
 
     [Authorize(Roles = "Employee")]
