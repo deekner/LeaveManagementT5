@@ -2,6 +2,14 @@
 
 <h2>Leave Requests</h2>
 
+
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.InsufficientLeaveDaysMessage))
+{
+    <div class="alert alert-danger">@ViewBag.InsufficientLeaveDaysMessage</div>
+}
+
+
 <form asp-action="Index" method="get">
     <div class="form-group">
         <label for="status">Filter by Status:</label>
@@ -15,6 +23,8 @@
     </div>
     <button type="submit" class="btn btn-primary mt-2">Apply Filter</button>
 </form>
+
+
 
 <table class="table">
     <thead>
@@ -54,3 +64,4 @@
         }
     </tbody>
 </table>
+
