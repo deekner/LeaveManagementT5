@@ -9,7 +9,7 @@
     <h4>Number of Days: @Model.NumberOfDays</h4>
     <h4>Year: @Model.Year</h4>
     <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <input type="submit" value="delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </form>
 </div>

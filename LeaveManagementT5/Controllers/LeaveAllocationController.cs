@@ -116,7 +116,7 @@ public class LeaveAllocationController : Controller
         return View(leaveAllocation);
     }
 
-    // GET: LeaveAllocation/Delete/5
+    
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
@@ -140,7 +140,7 @@ public class LeaveAllocationController : Controller
 
     // POST: LeaveAllocation/Delete/5
     [Authorize(Roles = "Admin")]
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

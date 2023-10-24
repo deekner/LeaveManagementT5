@@ -24,6 +24,8 @@ public class LeaveRequestController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult Index(string status)
     {
+
+
         var query = _context.LeaveRequest
             .Include(lr => lr.Employee)
             .Include(lr => lr.LeaveType)
@@ -36,6 +38,11 @@ public class LeaveRequestController : Controller
         }
 
         var leaveRequests = query.ToList();
+
+        if (TempData.ContainsKey("InsufficientLeaveDaysMessage"))
+        {
+            ViewBag.InsufficientLeaveDaysMessage = TempData["InsufficientLeaveDaysMessage"].ToString();
+        }
 
         return View(leaveRequests);
     }
@@ -53,48 +60,34 @@ public class LeaveRequestController : Controller
     [Authorize(Roles = "Employee")]
     public IActionResult Create(LeaveRequest leaveRequest)
     {
-        // Set the status to "Pending" (default)
+        
         leaveRequest.Status = "Pending";
 
-        
         var user = _userManager.GetUserAsync(User).Result;
         leaveRequest.EmployeeId = user.Id;
 
-
-
-        _context.LeaveRequest.Add(leaveRequest);
-        _context.SaveChanges();
-
-        //Räkna ut dagarna genom att ta slut minus start 
+        
         int requestedDays = (leaveRequest.EndDate - leaveRequest.StartDate).Days;
 
-
-        
         var selectedLeaveType = _context.LeaveTypes.FirstOrDefault(lt => lt.Id == leaveRequest.LeaveTypeId);
 
         if (selectedLeaveType != null && requestedDays <= selectedLeaveType.DefaultDays)
         {
-           
+            
             _context.LeaveRequest.Add(leaveRequest);
             _context.SaveChanges();
-            
-
             return RedirectToAction("MyLeaveRequests");
-        }
-
-        if (selectedLeaveType != null && requestedDays > selectedLeaveType.DefaultDays)
-        {
-            ViewBag.AlertClass = "alert-danger";
-            ViewBag.AlertMessage = "Requested days exceed the allowed limit for this leave type.";
         }
         else
         {
-            ViewBag.AlertClass = "hidden"; 
-            ViewBag.AlertMessage = "";
+           
+            ViewBag.AlertClass = "alert-danger";
+            ViewBag.AlertMessage = "Requested days exceed the allowed limit for this leave type.";
+            
+            ModelState.AddModelError("EndDate", "Requested days exceed the allowed limit for this leave type.");
         }
 
-        // Handle the case where the requested days exceed the allowed limit
-        ModelState.AddModelError("EndDate", "Requested days exceed the allowed limit for this leave type.");
+        
         Console.WriteLine("Den gubben gick inte");
         var leaveTypes = _context.LeaveTypes.ToList();
         ViewBag.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
@@ -193,21 +186,60 @@ public class LeaveRequestController : Controller
             return NotFound();
         }
 
-        
-        leaveRequest.Status = "Accepted";
-
-        var emailaddresses = _context.Users.Select(x => x.Email); //Finds the Email of select user depending on LeaveRequest
-        foreach (var emailaddress in emailaddresses) //Loops through all emails and sends message depending on user's email
+        if(leaveRequest.Status == "Pending")
         {
-            var receiver = emailaddress;
-            var subject = "Leave Request";
-            var message = "You've got a message from the Leave management system";
+            int daysToDeduct = (leaveRequest.EndDate - leaveRequest.StartDate).Days;
 
-            await _emailSender.SendEmailAsync(receiver, subject, message);
+            var allocatedLeave = _context.LeaveAllocation.FirstOrDefault(la => la.EmployeeId == leaveRequest.EmployeeId && la.LeaveTypeId == leaveRequest.LeaveTypeId);
+
+            if(allocatedLeave != null)
+            {
+                
+
+
+                if (allocatedLeave.NumberOfDays >= daysToDeduct)
+                {
+                    allocatedLeave.NumberOfDays -= daysToDeduct;
+
+                    leaveRequest.Status = "Accepted";
+
+                    _context.LeaveAllocation.Update(allocatedLeave);
+
+                    _context.LeaveRequest.Update(leaveRequest);
+
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    TempData["InsufficientLeaveDaysMessage"] = "The employee does not have enough days to take out this request. Consider editing the employees Allocation days or just straight up deny the request ";
+                    return RedirectToAction("Index");
+
+                }
+            }
         }
 
-        _context.LeaveRequest.Update(leaveRequest);
-        _context.SaveChanges();
+
+
+
+
+
+
+        //leaveRequest.Status = "Accepted";
+
+        ////------------------------------- 
+
+        //var emailaddresses = _context.Users.Select(x => x.Email); //Finds the Email of select user depending on LeaveRequest
+        //foreach (var emailaddress in emailaddresses) //Loops through all emails and sends message depending on user's email
+        //{
+        //    var receiver = emailaddress;
+        //    var subject = "Leave Request";
+        //    var message = "You've got a message from the Leave management system";
+
+        //    await _emailSender.SendEmailAsync(receiver, subject, message);
+        //}
+
+        //_context.LeaveRequest.Update(leaveRequest);
+        //_context.SaveChanges();
 
         return RedirectToAction("Index");
     }
@@ -226,16 +258,16 @@ public class LeaveRequestController : Controller
 
 
 
-        var emailaddresses = _context.Users.Select(x => x.Email);
-        foreach (var emailaddress in emailaddresses)
-        {
-            var receiver = emailaddress;
-            var subject = "Leave Request";
-            var message = "You've got a message from the Leave management system";
+        //var emailaddresses = _context.Users.Select(x => x.Email);
+        //foreach (var emailaddress in emailaddresses)
+        //{
+        //    var receiver = emailaddress;
+        //    var subject = "Leave Request";
+        //    var message = "You've got a message from the Leave management system";
 
-            await _emailSender.SendEmailAsync(receiver, subject, message);
-        }
-        
+        //    await _emailSender.SendEmailAsync(receiver, subject, message);
+        //}
+
 
         _context.LeaveRequest.Update(leaveRequest);
         _context.SaveChanges();
