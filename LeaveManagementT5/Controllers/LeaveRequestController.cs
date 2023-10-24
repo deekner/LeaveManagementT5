@@ -188,6 +188,7 @@ public class LeaveRequestController : Controller
 
         if(leaveRequest.Status == "Pending")
         {
+ 
             int daysToDeduct = (leaveRequest.EndDate - leaveRequest.StartDate).Days;
 
             var allocatedLeave = _context.LeaveAllocation.FirstOrDefault(la => la.EmployeeId == leaveRequest.EmployeeId && la.LeaveTypeId == leaveRequest.LeaveTypeId);
@@ -202,6 +203,7 @@ public class LeaveRequestController : Controller
                     allocatedLeave.NumberOfDays -= daysToDeduct;
 
                     leaveRequest.Status = "Accepted";
+
 
                     _context.LeaveAllocation.Update(allocatedLeave);
 
@@ -228,18 +230,18 @@ public class LeaveRequestController : Controller
 
         ////------------------------------- 
 
-        //var emailaddresses = _context.Users.Select(x => x.Email); //Finds the Email of select user depending on LeaveRequest
-        //foreach (var emailaddress in emailaddresses) //Loops through all emails and sends message depending on user's email
-        //{
-        //    var receiver = emailaddress;
-        //    var subject = "Leave Request";
-        //    var message = "You've got a message from the Leave management system";
+        var emailaddresses = _context.Users.Select(x => x.Email); //Finds the Email of select user depending on LeaveRequest
+        foreach (var emailaddress in emailaddresses) //Loops through all emails and sends message depending on user's email
+        {
+            var receiver = emailaddress;
+            var subject = "Leave Request";
+            var message = "You've got a message from the Leave management system";
 
-        //    await _emailSender.SendEmailAsync(receiver, subject, message);
-        //}
+            await _emailSender.SendEmailAsync(receiver, subject, message);
+        }
 
-        //_context.LeaveRequest.Update(leaveRequest);
-        //_context.SaveChanges();
+        _context.LeaveRequest.Update(leaveRequest);
+        _context.SaveChanges();
 
         return RedirectToAction("Index");
     }
@@ -258,15 +260,17 @@ public class LeaveRequestController : Controller
 
 
 
-        //var emailaddresses = _context.Users.Select(x => x.Email);
-        //foreach (var emailaddress in emailaddresses)
-        //{
-        //    var receiver = emailaddress;
-        //    var subject = "Leave Request";
-        //    var message = "You've got a message from the Leave management system";
 
-        //    await _emailSender.SendEmailAsync(receiver, subject, message);
-        //}
+       
+
+        var emailaddresses = _context.Users.Select(x => x.Email);
+        foreach (var emailaddress in emailaddresses)
+        {
+            var receiver = emailaddress;
+            var subject = "Leave Request";
+            var message = "You've got a message from the Leave management system";
+            await Task.Delay(5000);
+
 
 
         _context.LeaveRequest.Update(leaveRequest);
