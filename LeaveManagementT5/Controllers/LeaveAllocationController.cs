@@ -166,10 +166,12 @@ public class LeaveAllocationController : Controller
         // Retrieve the current user (employee)
         var user = _userManager.GetUserAsync(User).Result;
 
-        // Retrieve leave allocations for the current employee
+        
+
         var employeeLeaveAllocations = _context.LeaveAllocation
-            .Where(alloc => alloc.EmployeeId == user.Id)
-            .ToList();
+            .Include(la => la.LeaveType)
+            .Where(alloc => alloc.EmployeeId == user.Id).ToList();
+
 
         return View("MyLeaveAllocation", employeeLeaveAllocations);
     }
