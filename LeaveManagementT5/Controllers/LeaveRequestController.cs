@@ -226,7 +226,9 @@ public class LeaveRequestController : Controller
 
 
 
-        //leaveRequest.Status = "Accepted";
+
+
+        leaveRequest.Status = "Accepted";
 
         ////------------------------------- 
 
@@ -255,13 +257,13 @@ public class LeaveRequestController : Controller
             return NotFound();
         }
 
-        
+
         leaveRequest.Status = "Declined";
 
 
 
 
-       
+
 
         var emailaddresses = _context.Users.Select(x => x.Email);
         foreach (var emailaddress in emailaddresses)
@@ -273,9 +275,11 @@ public class LeaveRequestController : Controller
 
 
 
-        _context.LeaveRequest.Update(leaveRequest);
-        _context.SaveChanges();
+            _context.LeaveRequest.Update(leaveRequest);
+            _context.SaveChanges();
 
+
+        }
         return RedirectToAction("Index");
     }
 }
