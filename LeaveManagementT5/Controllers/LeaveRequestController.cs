@@ -262,9 +262,6 @@ public class LeaveRequestController : Controller
 
 
 
-
-
-
         var emailaddresses = _context.Users.Select(x => x.Email);
         foreach (var emailaddress in emailaddresses)
         {
@@ -273,10 +270,17 @@ public class LeaveRequestController : Controller
             var message = "You've got a message from the Leave management system";
             await Task.Delay(5000);
 
+            await _emailSender.SendEmailAsync(receiver, subject, message);
+
+            _context.LeaveRequest.Update(leaveRequest);
+            _context.SaveChanges();
 
 
             _context.LeaveRequest.Update(leaveRequest);
             _context.SaveChanges();
+
+        }
+
 
 
         }
