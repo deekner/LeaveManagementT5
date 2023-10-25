@@ -280,10 +280,7 @@ public class LeaveRequestController : Controller
             _context.SaveChanges();
 
         }
-
-
-
-        }
+        
         return RedirectToAction("Index");
     }
 }
