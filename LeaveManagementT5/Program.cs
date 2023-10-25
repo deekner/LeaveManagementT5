@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using LeaveManagementT5.Models;
 using LeaveManagementT5.Services;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace LeaveManagementT5
 {
@@ -22,8 +24,9 @@ namespace LeaveManagementT5
             //Inject connectionstring
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
             builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders().AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            Environment.SetEnvironmentVariable("WKHTMLTOPDF_PATH", @"C:\Users\timni\Desktop\LeaveManagement\LeaveManagement_T5\LeaveManagementT5\libwkhtmltox.dll", EnvironmentVariableTarget.Process);
 
-            
 
             var app = builder.Build();
 
