@@ -1,0 +1,35 @@
+﻿@model List<LeaveManagementT5.Models.UserViewModel>
+
+<h1>User in the system</h1>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                @* <th>Email</th> *@
+                <th>Phone</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    @* <td>@user.Email</td> *@
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

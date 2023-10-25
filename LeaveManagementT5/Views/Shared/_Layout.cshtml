@@ -48,6 +48,15 @@
                             </li>
                             
                         }
+
+                        <!-- Jobbar med denna -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="DisplayUsers">View Users</a>
+                            </li>
+                        }
+
                         
 
 
