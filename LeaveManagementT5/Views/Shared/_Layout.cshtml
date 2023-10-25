@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LeaveManagementT5</title>
+    <link rel="icon" type="image/x-icon" href="~/Images/favicon-32x32.png">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaveManagementT5.styles.css" asp-append-version="true" />
@@ -98,11 +99,11 @@
             @RenderBody()
             @if (User.IsInRole("Employee"))
             {
-                <h1>Hej ifrån Employee</h1>
+                <h1></h1>
             }
             @if(User.IsInRole("Admin"))
             {
-                <h1>Hej Ifrån Admin</h1>
+                <h1></h1>
             }
 
           
@@ -110,13 +111,13 @@
     </div>
 
    
-    <footer class="border-top footer text-muted">
+  
 
 
     <footer class="border-top footer text-muted" style="background-color: #0057b8; height: 10%;">
 
-        <div class="container">
-            &copy; 2023 - LeaveManagementT5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container" style="color:white;">
+            &copy; 2023 - LeaveManagementT5 
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
