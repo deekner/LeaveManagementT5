@@ -7,6 +7,10 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "ConnectionDataBase"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "ConnectionDBase"
     }
   }
 }
