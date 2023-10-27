@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/LeaveManagementT5/providers/Microsoft.ServiceLinker/linkers/ConnectionDataBase_804532BF5E",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/leavemanagementt5databaseservert5/databases/LeaveManagementT5_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionDataBase"
+    }
+  }
+}
