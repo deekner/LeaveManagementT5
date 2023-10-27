@@ -7,8 +7,8 @@ namespace LeaveManagementT5.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            var mail = "SenderTeam5@outlook.com";
-            var pw = "SenderAdmin123!";
+            var mail = "Team5Sender@outlook.com";
+            var pw = "Bobsbilar123!";
 
             var client = new SmtpClient("smtp.office365.com", 587)
             {
